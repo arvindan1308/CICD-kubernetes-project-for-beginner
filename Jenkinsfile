@@ -16,10 +16,22 @@ pipeline {
             }
         }
 
+        stage('Verify Dockerfile Path') {
+              steps {
+                sh '''
+                  pwd
+                  ls apps/frontend
+                '''
+              }
+            }
+
         stage('Build Docker Image') {
             steps {
                 sh """
-                  docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .
+                  docker build \
+                    -t arvindan1308n/nginx-prod:4 \
+                    -f apps/frontend/Dockerfile \
+                    apps/frontend
                 """
             }
         }
