@@ -1,19 +1,41 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_USER = "arvindan1308n" // Your Docker Hub username
+        IMAGE_NAME = "nginx-prod"
+        REPO_URL = "github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
+    }
     stages {
-        stage('Build') {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Build & Push Docker') {
             steps {
-                //
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'U', passwordVariable: 'P')]) {
+                    sh """
+                    echo "$P" | docker login -u "$U" --password-stdin
+                    docker build -t ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER} -f apps/frontend/Dockerfile apps/frontend
+                    docker push ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+                    """
+                }
             }
         }
-        stage('Test') {
+        stage('Update Manifest') {
             steps {
-                //
+                sh "sed -i 's|image:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' manifests/deployment.yaml"
             }
         }
-        stage('Deploy') {
+        stage('Push Changes to Git') {
             steps {
-                //
+                withCredentials([usernamePassword(credentialsId: 'git-creds', usernameVariable: 'GU', passwordVariable: 'GP')]) {
+                    sh """
+                    git config user.email "jenkins@devops.com"
+                    git config user.name "jenkins-bot"
+                    git add manifests/deployment.yaml
+                    git commit -m "chore: update image to build ${BUILD_NUMBER} [skip ci]"
+                    git push https://${GU}:${GP}@${REPO_URL} HEAD:main
+                    """
+                }
             }
         }
     }

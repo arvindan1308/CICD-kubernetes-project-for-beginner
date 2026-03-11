@@ -5,8 +5,9 @@ metadata:
   namespace: production
 spec:
   selector:
-    app: nginx-app ##nginx metadata name
+    app: nginx-web ##nginx metadata name
   type: ClusterIP
   ports:
-  - port: 80
-    targetPort: 80
+    - protocol: TCP
+      port: 80
+      targetPort: 80
