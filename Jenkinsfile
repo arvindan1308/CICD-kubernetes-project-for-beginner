@@ -1,10 +1,14 @@
 pipeline {
     agent any
 
+    triggers {
+        githubPush()
+    }
+
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-prod"
-        REPO_URL = "https://github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git
+        REPO_URL = "https://github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
     }
 
     stages {
