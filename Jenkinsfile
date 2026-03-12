@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-prod"
-        REPO_URL = "https://github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
+        REPO_URL = "https://github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git
     }
 
     stages {
@@ -45,13 +45,13 @@ pipeline {
                     git config user.email "jenkins@devops.com"
                     git config user.name "jenkins-bot"
 
-                    git add manifests/deployment.yaml
-                    git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes"
+            git add manifests/deployment.yaml
+            git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes"
 
-                    git push https://$GU:$GP@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
-                    '''
-                }
-            }
+            git push https://$GU:$GP@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
+            '''
         }
+    }
+}
     }
 }
