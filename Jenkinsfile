@@ -53,7 +53,7 @@ pipeline {
 
             git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes"
 
-            git push origin HEAD:main
+            git push https://$GU:$GP@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
             '''
         }
     }
