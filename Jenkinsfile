@@ -42,15 +42,16 @@ pipeline {
             }
         }
 
-        stage('Push Changes to Git') {
+            stage('Push Changes to Git') {
     steps {
         withCredentials([usernamePassword(credentialsId: 'git-creds', usernameVariable: 'GU', passwordVariable: 'GP')]) {
             sh '''
             git config user.email "jenkins@devops.com"
             git config user.name "jenkins-bot"
 
-            git add manifests/deployment.yaml
+            git pull origin main
 
+            git add manifests/deployment.yaml
             git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes"
 
             git push https://$GU:$GP@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
