@@ -44,7 +44,7 @@ pipeline {
 
             stage('Push Changes to Git') {
         steps {
-            withCredentials([usernamePassword(credentialsId: 'git-creds', usernameVariable: 'GU', passwordVariable: 'GP')]) {
+            withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GU', passwordVariable: 'GP')]) {
                 sh '''
                 git config user.email "jenkins-bot@automation.com"
                 git config user.name "Jenkins CI"
