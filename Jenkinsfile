@@ -11,7 +11,7 @@ pipeline {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-gitops"
         // Use the HTTPS URL for the push logic
-        REPO_URL = "https://github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
+        REPO_URL = "github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
     }
 
     stages {
@@ -54,7 +54,7 @@ pipeline {
 
 
                     # The key fix: push current HEAD to remote main using credentials
-                    git push https://${GU}:${GP}@${REPO_URL} HEAD:main
+                    git push https://${GU}:${GP}@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
                     '''
                 }
             }
