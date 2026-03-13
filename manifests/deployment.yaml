@@ -20,8 +20,10 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: arvindan1308n/nginx-prod:test
-          imagePullPolicy: IfNotPresent # Crucial for local images
+          # 1. Update this to your full private repo path (e.g., index.docker.io/arvindan1308n/...)
+          image: arvindan1308n/nginx-gitops:latest
+          # 2. Change Policy to 'Always' so it pulls the fresh image from the repo
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -33,4 +35,4 @@ spec:
               memory: "128Mi"
               cpu: "200m"
       imagePullSecrets:
-        - name: regcred
+        - name: regcred # This MUST match the name of the secret we create below

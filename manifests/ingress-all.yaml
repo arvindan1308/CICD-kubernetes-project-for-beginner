@@ -7,16 +7,16 @@ metadata:
   namespace: production
 spec:
   rules:
-  - host: app.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx-service ## service metadata name
-            port:
-              number: 80
+    - host: app.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service ## service metadata name
+                port:
+                  number: 80
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -29,16 +29,16 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: argocd.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: argocd-server
-            port:
-              number: 80
+    - host: argocd.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -49,13 +49,13 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: grafana.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: monitoring-grafana
-            port:
-              number: 80
+    - host: grafana.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-grafana
+                port:
+                  number: 80
