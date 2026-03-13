@@ -6,7 +6,7 @@ pipeline {
     triggers {
         githubPush()
     }
-    
+
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-gitops"
@@ -51,7 +51,7 @@ pipeline {
                     
                     # Ensure BUILD_NUMBER is inside the string to be captured in the commit
                     # git commit -m "Auto-update image to tag ${BUILD_NUMBER}"
-                    git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes are made"
+                    git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No new changes are made"
 
 
                     # The key fix: push current HEAD to remote main using credentials
