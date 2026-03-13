@@ -8,7 +8,6 @@ pipeline {
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-gitops"
-        REPO_URL = "github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
     }
 
     stages {
@@ -28,7 +27,7 @@ pipeline {
                     ).trim()
 
                     if (commitMessage.contains("[skip ci]")) {
-                        echo "Commit created by Jenkins. Skipping build."
+                        echo "Skipping build triggered by Jenkins commit"
                         currentBuild.result = 'ABORTED'
                         error("Stopping pipeline to prevent loop")
                     }
@@ -41,8 +40,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'U', passwordVariable: 'P')]) {
                     sh '''
                     echo $P | docker login -u $U --password-stdin
-                    docker build -t $DOCKER_USER/$IMAGE_NAME:$BUILD_NUMBER -f apps/frontend/Dockerfile apps/frontend
-                    docker push $DOCKER_USER/$IMAGE_NAME:$BUILD_NUMBER
+                    docker build -t arvindan1308n/nginx-gitops:$BUILD_NUMBER -f apps/frontend/Dockerfile apps/frontend
+                    docker push arvindan1308n/nginx-gitops:$BUILD_NUMBER
                     '''
                 }
             }
@@ -50,7 +49,9 @@ pipeline {
 
         stage('Update Manifest') {
             steps {
-                sh "sed -i 's|${DOCKER_USER}/${IMAGE_NAME}:.*|${DOCKER_USER}/${IMAGE_NAME}:${env.BUILD_NUMBER}|' manifests/deployment.yaml"
+                sh """
+                sed -i 's|arvindan1308n/nginx-gitops:.*|arvindan1308n/nginx-gitops:${BUILD_NUMBER}|' manifests/deployment.yaml
+                """
             }
         }
 
@@ -63,7 +64,7 @@ pipeline {
 
                     git add manifests/deployment.yaml
 
-                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]" || echo "No changes to commit"
+                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]" || echo "No changes"
 
                     git push https://${GU}:${GP}@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
                     '''
