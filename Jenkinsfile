@@ -1,12 +1,12 @@
 pipeline {
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-    }
+    // options {
+    //     buildDiscarder(logRotator(numToKeepStr: '10'))
+    // }
     agent any
 
-    triggers {
-        githubPush()
-    }
+    // triggers {
+    //     githubPush()
+    // }
 
     environment {
         DOCKER_USER = "arvindan1308n"
