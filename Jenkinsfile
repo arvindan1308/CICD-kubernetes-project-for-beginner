@@ -64,7 +64,7 @@ pipeline {
 
                     git add manifests/deployment.yaml
 
-                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]"
+                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci] || echo "No changes
 
                     git push https://${GU}:${GP}@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
                     '''
