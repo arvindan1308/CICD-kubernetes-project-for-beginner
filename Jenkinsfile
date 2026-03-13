@@ -1,23 +1,38 @@
 pipeline {
+    agent any
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
     }
-    agent any
-    // triggers {
-    //     githubPush()
-    // }
 
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-gitops"
-        // Use the HTTPS URL for the push logic
         REPO_URL = "github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Prevent Jenkins Loop') {
+            steps {
+                script {
+                    def commitMessage = sh(
+                        script: "git log -1 --pretty=%B",
+                        returnStdout: true
+                    ).trim()
+
+                    if (commitMessage.contains("[skip ci]")) {
+                        echo "Commit created by Jenkins. Skipping build."
+                        currentBuild.result = 'ABORTED'
+                        error("Stopping pipeline to prevent loop")
+                    }
+                }
             }
         }
 
@@ -35,7 +50,6 @@ pipeline {
 
         stage('Update Manifest') {
             steps {
-                // Use double quotes for the sh command to allow Jenkins to inject the environment variables
                 sh "sed -i 's|${DOCKER_USER}/${IMAGE_NAME}:.*|${DOCKER_USER}/${IMAGE_NAME}:${env.BUILD_NUMBER}|' manifests/deployment.yaml"
             }
         }
@@ -48,12 +62,9 @@ pipeline {
                     git config user.name "Jenkins CI"
 
                     git add manifests/deployment.yaml
-                    
-                    # Ensure BUILD_NUMBER is inside the string to be captured in the commit
-                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]"
 
+                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]" || echo "No changes to commit"
 
-                    # The key fix: push current HEAD to remote main using credentials
                     git push https://${GU}:${GP}@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
                     '''
                 }
@@ -63,7 +74,6 @@ pipeline {
 
     post {
         always {
-            // Optional: Clean up workspace to keep the agent healthy
             cleanWs()
         }
     }
