@@ -3,7 +3,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
     }
     agent any
-
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-gitops"
