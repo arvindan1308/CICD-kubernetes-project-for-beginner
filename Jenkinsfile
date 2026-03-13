@@ -47,7 +47,7 @@ pipeline {
                     
                     # Ensure BUILD_NUMBER is inside the string to be captured in the commit
                     # git commit -m "Auto-update image to tag ${BUILD_NUMBER}"
-                    git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes"
+                    git commit -m "Update image to build $BUILD_NUMBER [skip ci]" || echo "No changes are made"
 
 
                     # The key fix: push current HEAD to remote main using credentials
