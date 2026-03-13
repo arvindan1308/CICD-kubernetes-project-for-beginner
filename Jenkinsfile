@@ -8,7 +8,7 @@ pipeline {
     environment {
         DOCKER_USER = "arvindan1308n"
         IMAGE_NAME = "nginx-gitops"
-        REPO_URL = "https://github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
+        REPO_URL = "github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git"
     }
 
     stages {
