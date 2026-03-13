@@ -21,7 +21,7 @@ spec:
       containers:
         - name: nginx
           # 1. Update this to your full private repo path (e.g., index.docker.io/arvindan1308n/...)
-          image: arvindan1308n/nginx-gitops:330
+          image: arvindan1308n/nginx-gitops:331
           # 2. Change Policy to 'Always' so it pulls the fresh image from the repo
           imagePullPolicy: Always
           ports:
