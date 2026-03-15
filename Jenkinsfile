@@ -18,22 +18,22 @@ pipeline {
             }
         }
 
-        stage('Prevent Jenkins Loop') {
-            steps {
-                script {
-                    def commitMessage = sh(
-                        script: "git log -1 --pretty=%B",
-                        returnStdout: true
-                    ).trim()
+        // stage('Prevent Jenkins Loop') {
+        //     steps {
+        //         script {
+        //             def commitMessage = sh(
+        //                 script: "git log -1 --pretty=%B",
+        //                 returnStdout: true
+        //             ).trim()
 
-                    if (commitMessage.contains("[skip ci]")) {
-                        echo "Skipping build triggered by Jenkins commit"
-                        currentBuild.result = 'ABORTED'
-                        error("Stopping pipeline to prevent loop")
-                    }
-                }
-            }
-        }
+        //             if (commitMessage.contains("[skip ci]")) {
+        //                 echo "Skipping build triggered by Jenkins commit"
+        //                 currentBuild.result = 'ABORTED'
+        //                 error("Stopping pipeline to prevent loop")
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Build & Push Docker') {
             steps {
@@ -55,22 +55,22 @@ pipeline {
             }
         }
 
-        stage('Push Changes to Git') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GU', passwordVariable: 'GP')]) {
-                    sh '''
-                    git config user.email "jenkins-bot@automation.com"
-                    git config user.name "Jenkins CI"
+        // stage('Push Changes to Git') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GU', passwordVariable: 'GP')]) {
+        //             sh '''
+        //             git config user.email "jenkins-bot@automation.com"
+        //             git config user.name "Jenkins CI"
 
-                    git add manifests/deployment.yaml
+        //             git add manifests/deployment.yaml
 
-                    git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]" || echo "No changes to commit"
+        //             git commit -m "ci: update nginx image to $BUILD_NUMBER [skip ci]" || echo "No changes to commit"
 
-                    git push https://${GU}:${GP}@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
-                    '''
-                }
-            }
-        }
+        //             git push https://${GU}:${GP}@github.com/arvindan1308/CICD-kubernetes-project-for-beginner.git HEAD:main
+        //             '''
+        //         }
+        //     }
+        // }
     }
 
     post {
